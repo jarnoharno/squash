@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fi" ng-app="squash">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Syysköpö</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.11.0/ui-bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+  </head>
+  <body>
+    <div class="container" ng-controller="squash">
+      <div class="page-header">
+        <h1>Syysköpö 2014</h1>
+        <p class="lead">Round robin bonanza</p>
+      </div>
+      <div class="panel panel-default">
+        <div id="editor" class="panel-body" style="height:350px">return {
+
+  // Pelaajien nimet välilyönneillä eroteltuna. Tästä muuttujasta luetut
+  // nimet tallennetaan globaaliin listaan `players`.
+  player_names: 'Lari Santtu Timo Lari Santtu Jarno',
+
+  // Viikossa pelattavien otteluiden lukumäärä. Tallennetaan globaaliin
+  // muuttujaan `games`.
+  games_per_week: 3,
+
+  // Otteluparin palauttava funktio, jota kutsutaan jokaisella viikon ja pelin
+  // yhdistelmällä. `week` on kokonaisluku välillä [0, weeks) ja `game`
+  // kokonaisluku välillä [0, games).
+  get_opponents: function(week, game) {
+    var k = 2 * (week * games + game) + week;
+    var n = players.length;
+    return {
+      home: players[k % n],
+      visitor: players[(k + 1) % n]
+    };
+  }
+};</div>
+      </div>
+      {{ editor_text }}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th class="col-xs-3 col-sm-2 col-md-1"></th>
+            <th ng-repeat="game in range(games)">{{game + 1}}. peli</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="entry in matches">
+            <td>{{entry.week.number}}. viikko</td>
+            <td ng-repeat="game in entry.games">
+              {{game.home + ' - ' + game.visitor}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script src="squash.js"></script>
+  </body>
+</html>
